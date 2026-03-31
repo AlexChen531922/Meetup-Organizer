@@ -6,6 +6,8 @@ const userSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    role: { type: String, enum: ['user', 'admin'], default: 'user' },
+    savedEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Event' }], //userstory 11 saveevent
     university: { type: String },
     address: { type: String },
 });
