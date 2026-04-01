@@ -4,7 +4,7 @@ const { getEvents, createEvent, updateEvent, deleteEvent, joinEvent, leaveEvent 
 const { protect } = require('../middleware/authMiddleware');
 const router = express.Router();
 
-router.route('/').get(protect, getEvents).post(protect, createEvent);
+router.route('/').get(getEvents).post(protect, createEvent);
 router.route('/:id').put(protect, updateEvent).delete(protect, deleteEvent);
 
 router.post('/:id/join', protect, joinEvent);
