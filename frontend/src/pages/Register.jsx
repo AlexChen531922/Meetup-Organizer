@@ -13,7 +13,10 @@ const Register = () => {
       alert('Registration successful. Please log in.');
       navigate('/login');
     } catch (error) {
-      alert('Registration failed. Please try again.');
+      // 這裡改掉！把後端傳來的真實錯誤訊息印出來
+      const errorMessage = error.response?.data?.message || error.message;
+      alert(`Registration failed: ${errorMessage}`);
+      console.error('Full error:', error.response?.data);
     }
   };
 

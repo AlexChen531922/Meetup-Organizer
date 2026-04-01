@@ -185,7 +185,7 @@ const EventForm = ({ events, setEvents, editingEvent, setEditingEvent }) => {
               onChange={(e) => setFormData({ ...formData, category: e.target.value })}
               className="w-full p-3 bg-gray-50 border border-transparent focus:bg-white focus:border-green-500 rounded-lg outline-none transition text-gray-700"
             >
-              <option value="" disabled>Select categor</option>
+              <option value="" disabled>Select category</option>
               <option value="Outdoor & Adventure">Outdoor & Adventure</option>
               <option value="Technology">Technology</option>
               <option value="Health & Wellness">Health & Wellness</option>
