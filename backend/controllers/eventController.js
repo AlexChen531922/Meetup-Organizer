@@ -81,6 +81,20 @@ const deleteEvent = async (req, res) => {
     }
 };
 
+// Get single event by ID (Added for Event Details Page)
+const getEventById = async (req, res) => {
+    try {
+        const event = await Event.findById(req.params.id)
+            .populate('hostId', 'name email')
+            .populate('attendees', 'name');
+
+        if (!event) return res.status(404).json({ message: 'Event not found' });
+        res.status(200).json(event);
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error: error.message });
+    }
+};
+
 // Join event (UserStory 3: Attend)
 const joinEvent = async (req, res) => {
     try {
@@ -99,6 +113,11 @@ const joinEvent = async (req, res) => {
 
         event.attendees.push(req.user._id);
         await event.save();
+
+        // 🌟 CRITICAL FIX: Populate before sending back to frontend to avoid React crash
+        await event.populate('hostId', 'name');
+        await event.populate('attendees', 'name');
+
         res.status(200).json(event);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -113,6 +132,11 @@ const leaveEvent = async (req, res) => {
 
         event.attendees = event.attendees.filter(userId => userId.toString() !== req.user._id.toString());
         await event.save();
+
+        // 🌟 CRITICAL FIX: Populate again
+        await event.populate('hostId', 'name');
+        await event.populate('attendees', 'name');
+
         res.status(200).json(event);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -122,9 +146,10 @@ const leaveEvent = async (req, res) => {
 module.exports = {
     getEvents,
     createEvent,
-    getMyEvents, // Exported
+    getMyEvents,
     updateEvent,
     deleteEvent,
     joinEvent,
-    leaveEvent
+    leaveEvent,
+    getEventById
 };
