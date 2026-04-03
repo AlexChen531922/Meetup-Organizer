@@ -74,3 +74,4 @@ jobs:
           pm2 delete all || true
           pm2 start backend/server.js --name "meetup-backend"
           pm2 save
+cd /home/ubuntu/Meetup-Organizer/backend
