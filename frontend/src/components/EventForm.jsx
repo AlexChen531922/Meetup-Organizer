@@ -37,7 +37,7 @@ const EventForm = ({ events, setEvents, editingEvent, setEditingEvent }) => {
     } else {
       setFormData(initialState);
     }
-  }, [editingEvent]);
+  }, [editingEvent, initialState]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
