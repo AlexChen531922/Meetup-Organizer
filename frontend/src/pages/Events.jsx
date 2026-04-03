@@ -204,18 +204,6 @@ const Events = () => {
           </div>
         </div>
 
-        {/* Only logged in users can create events */}
-        {user && (
-          <div className="mb-12 max-w-3xl mx-auto">
-            <EventForm
-              events={events}
-              setEvents={setEvents}
-              editingEvent={editingEvent}
-              setEditingEvent={setEditingEvent}
-            />
-          </div>
-        )}
-
         {/* Events List */}
         <div className="mt-8">
           <div className="flex items-center mb-6">
