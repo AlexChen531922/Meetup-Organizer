@@ -48,7 +48,7 @@ jobs:
         working-directory: ./frontend
         run: |
           npm install
-          CI=False npm run build
+          CI=false npm run build
 
       # Step 9: Run Backend Tests - 
       - name: Run Backend Tests
