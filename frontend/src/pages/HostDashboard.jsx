@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import EventForm from './EventForm';
+import EventForm from '../components/EventForm';
 import { useAuth } from '../context/AuthContext';
 import axiosInstance from '../axiosConfig';
 

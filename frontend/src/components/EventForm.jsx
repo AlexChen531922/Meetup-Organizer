@@ -3,20 +3,23 @@ import { useAuth } from '../context/AuthContext';
 import axiosInstance from '../axiosConfig';
 
 // 加入 onClose 作為 prop
-const EventForm = ({ events, setEvents, editingEvent, setEditingEvent, onClose }) => {
+
+const initialState = {
+  title: '',
+  description: '',
+  date: '',
+  time: '',
+  location: '',
+  category: '',
+  group: '',
+  attendeeLimit: '',
+  image: '',
+};
+
+const EventForm = ({ events, setEvents, editingEvent, setEditingEvent, onClose, fetchEvents }) => {
   const { user } = useAuth();
 
-  const initialState = {
-    title: '',
-    description: '',
-    date: '',
-    time: '',
-    location: '',
-    category: '',
-    group: '',
-    attendeeLimit: '',
-    image: '',
-  };
+
 
   const [formData, setFormData] = useState(initialState);
   const [error, setError] = useState('');
@@ -25,7 +28,7 @@ const EventForm = ({ events, setEvents, editingEvent, setEditingEvent, onClose }
     if (editingEvent) {
       setFormData({
         title: editingEvent.title || '',
-        description: editingEvent.details || editingEvent.summary || '',
+        description: editingEvent.details || editingEvent.details || '',
         date: editingEvent.date || '',
         time: editingEvent.time || '',
         location: editingEvent.location || '',
@@ -38,7 +41,7 @@ const EventForm = ({ events, setEvents, editingEvent, setEditingEvent, onClose }
     } else {
       setFormData(initialState);
     }
-  }, [editingEvent, initialState]);
+  }, [editingEvent]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -59,11 +62,21 @@ const EventForm = ({ events, setEvents, editingEvent, setEditingEvent, onClose }
 
     try {
       if (editingEvent) {
-        const response = await axiosInstance.put(`/api/events/${editingEvent._id}`, payload, {
+        // 1. 發送更新請求
+        await axiosInstance.put(`/api/events/${editingEvent._id}`, payload, {
           headers: { Authorization: `Bearer ${user.token}` },
         });
-        setEvents(events.map((event) => (event._id === response.data._id ? response.data : event)));
+
+        // 2. 關鍵：直接叫父元件重新抓最新、有 populate 過的資料
+        if (fetchEvents) {
+          await fetchEvents();
+        } else {
+          // 如果沒傳 fetchEvents，最保險的做法是強制重新整理
+          window.location.reload();
+        }
+
         alert('Event updated successfully!');
+
       } else {
         const response = await axiosInstance.post('/api/events', payload, {
           headers: { Authorization: `Bearer ${user.token}` },
