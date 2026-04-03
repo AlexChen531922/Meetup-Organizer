@@ -13,6 +13,15 @@ const Events = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('All Categories');
 
+  const fetchEvents = async () => {
+    try {
+      const response = await axiosInstance.get('/api/events');
+      setEvents(response.data);
+    } catch (error) {
+      console.error('Failed to fetch events.');
+    }
+  };
+
   const categories = [
     'All Categories',
     'Outdoor & Adventure',
@@ -23,14 +32,6 @@ const Events = () => {
   ];
 
   useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const response = await axiosInstance.get('/api/events');
-        setEvents(response.data);
-      } catch (error) {
-        console.error('Failed to fetch events.');
-      }
-    };
     fetchEvents();
   }, []);
 
@@ -203,6 +204,16 @@ const Events = () => {
             </select>
           </div>
         </div>
+
+        {editingEvent && (
+          <EventForm
+            events={events}
+            fetchEvents={fetchEvents}
+            setEvents={setEvents}
+            editingEvent={editingEvent}
+            setEditingEvent={setEditingEvent}
+          />
+        )}
 
         {/* Events List */}
         <div className="mt-8">

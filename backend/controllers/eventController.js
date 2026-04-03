@@ -1,10 +1,27 @@
 const Event = require('../models/Event');
 
+// Fetch events created by the logged-in user (Host Dashboard)
+const getMyEvents = async (req, res) => {
+    try {
+        // Find events where hostId matches the current user's ID
+        const events = await Event.find({ hostId: req.user._id })
+            .populate('hostId', 'name')
+            .populate('attendees', 'name')
+            .sort({ createdAt: -1 });
+
+        res.status(200).json(events);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 // Get all events (UserStory 2: Browse)
 const getEvents = async (req, res) => {
     try {
-        // populate get host and attendees name for front end
-        const events = await Event.find().populate('hostId', 'name').populate('attendees', 'name');
+        const events = await Event.find()
+            .populate('hostId', 'name')
+            .populate('attendees', 'name')
+            .sort({ date: 1 }); // Sort by upcoming date
         res.status(200).json(events);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -14,11 +31,17 @@ const getEvents = async (req, res) => {
 // Create event (UserStory 1: Create)
 const createEvent = async (req, res) => {
     try {
-        const newEventData = { ...req.body, hostId: req.user.id };
-        const event = await Event.create(newEventData);
-        res.status(201).json(event);
+        const eventData = { ...req.body };
+
+        // Bind the current user's ID as the hostId
+        eventData.hostId = req.user._id;
+
+        const newEvent = new Event(eventData);
+        const savedEvent = await newEvent.save();
+
+        res.status(201).json(savedEvent);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(500).json({ message: "Failed to create event", error: error.message });
     }
 };
 
@@ -28,8 +51,8 @@ const updateEvent = async (req, res) => {
         const event = await Event.findById(req.params.id);
         if (!event) return res.status(404).json({ message: 'Event not found' });
 
-        // check permissions: only host or admin can modify
-        if (event.hostId.toString() !== req.user.id && req.user.role !== 'admin') {
+        // Check permissions: only host or admin can modify
+        if (event.hostId.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
             return res.status(401).json({ message: 'User not authorized to update' });
         }
 
@@ -46,7 +69,8 @@ const deleteEvent = async (req, res) => {
         const event = await Event.findById(req.params.id);
         if (!event) return res.status(404).json({ message: 'Event not found' });
 
-        if (event.hostId.toString() !== req.user.id && req.user.role !== 'admin') {
+        // Check permissions: only host or admin can modify
+        if (event.hostId.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
             return res.status(401).json({ message: 'User not authorized to delete' });
         }
 
@@ -63,17 +87,17 @@ const joinEvent = async (req, res) => {
         const event = await Event.findById(req.params.id);
         if (!event) return res.status(404).json({ message: 'Event not found' });
 
-        // check if already joined
-        if (event.attendees.includes(req.user.id)) {
+        // Check if already joined
+        if (event.attendees.includes(req.user._id)) {
             return res.status(400).json({ message: 'You have already joined this event' });
         }
 
-        // check attendee limit
+        // Check attendee limit
         if (event.attendeeLimit > 0 && event.attendees.length >= event.attendeeLimit) {
             return res.status(400).json({ message: 'Event is full' });
         }
 
-        event.attendees.push(req.user.id);
+        event.attendees.push(req.user._id);
         await event.save();
         res.status(200).json(event);
     } catch (error) {
@@ -87,7 +111,7 @@ const leaveEvent = async (req, res) => {
         const event = await Event.findById(req.params.id);
         if (!event) return res.status(404).json({ message: 'Event not found' });
 
-        event.attendees = event.attendees.filter(userId => userId.toString() !== req.user.id);
+        event.attendees = event.attendees.filter(userId => userId.toString() !== req.user._id.toString());
         await event.save();
         res.status(200).json(event);
     } catch (error) {
@@ -95,4 +119,12 @@ const leaveEvent = async (req, res) => {
     }
 };
 
-module.exports = { getEvents, createEvent, updateEvent, deleteEvent, joinEvent, leaveEvent };
+module.exports = {
+    getEvents,
+    createEvent,
+    getMyEvents, // Exported
+    updateEvent,
+    deleteEvent,
+    joinEvent,
+    leaveEvent
+};
