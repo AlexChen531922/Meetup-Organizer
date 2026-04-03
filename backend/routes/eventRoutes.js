@@ -1,18 +1,17 @@
-
 const express = require('express');
 const {
     getEvents,
     createEvent,
-    getMyEvents, // Added this
+    getMyEvents,
     updateEvent,
     deleteEvent,
     joinEvent,
-    leaveEvent
+    leaveEvent,
+    getEventById
 } = require('../controllers/eventController');
 const { protect } = require('../middleware/authMiddleware');
 const router = express.Router();
 
-// Specific routes must come before routes with parameters (:id)
 router.get('/my-events', protect, getMyEvents);
 
 router.route('/')
@@ -20,6 +19,7 @@ router.route('/')
     .post(protect, createEvent);
 
 router.route('/:id')
+    .get(getEventById)
     .put(protect, updateEvent)
     .delete(protect, deleteEvent);
 
