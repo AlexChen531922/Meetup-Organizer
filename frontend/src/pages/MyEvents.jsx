@@ -1,18 +1,24 @@
 // frontend/src/pages/MyEvents.jsx
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axiosInstance from '../axiosConfig';
+import { useAuth } from '../context/AuthContext';
 import EventCard from '../components/EventCard';
 
 const MyEvents = () => {
     const [activeTab, setActiveTab] = useState('upcoming');
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
-
+    const { user } = useAuth();
 
     useEffect(() => {
         const fetchMyEvents = async () => {
+
+            if (!user) return;
+
             try {
-                const response = await axios.get('/api/events/my-events');
+                const response = await axiosInstance.get('/api/events/attended', {
+                    headers: { Authorization: `Bearer ${user.token}` }
+                });
                 setEvents(response.data);
                 setLoading(false);
             } catch (error) {
@@ -21,8 +27,7 @@ const MyEvents = () => {
             }
         };
         fetchMyEvents();
-    }, []);
-
+    }, [user]);
 
     const now = new Date();
     const upcomingEvents = events.filter(e => new Date(e.date) >= now);

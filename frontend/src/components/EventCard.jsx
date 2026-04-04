@@ -11,7 +11,7 @@ const EventCard = ({ event }) => {
         <div className="bg-white rounded-xl overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow duration-300 flex flex-col h-full relative">
             <div className="h-48 w-full relative">
                 <img
-                    src={event.imageUrl || 'https://via.placeholder.com/400x200'}
+                    src={event.image || 'https://via.placeholder.com/400x200'}
                     alt={event.title}
                     className="w-full h-full object-cover"
                 />
