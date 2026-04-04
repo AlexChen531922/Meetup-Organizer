@@ -2,7 +2,8 @@ const express = require('express');
 const {
     getEvents,
     createEvent,
-    getMyEvents,
+    getHostedEvents,
+    getAttendedEvents,
     updateEvent,
     deleteEvent,
     joinEvent,
@@ -12,7 +13,8 @@ const {
 const { protect } = require('../middleware/authMiddleware');
 const router = express.Router();
 
-router.get('/my-events', protect, getMyEvents);
+router.get('/hosted', protect, getHostedEvents);
+router.get('/attended', protect, getAttendedEvents);
 
 router.route('/')
     .get(getEvents)

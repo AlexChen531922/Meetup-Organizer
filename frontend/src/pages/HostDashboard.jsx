@@ -24,7 +24,7 @@ const HostDashboard = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axiosInstance.get('/api/events/my-events', {
+        const response = await axiosInstance.get('/api/events/hosted', {
           headers: { Authorization: `Bearer ${user.token}` }
         });
         setEvents(response.data);

@@ -1,17 +1,27 @@
 const Event = require('../models/Event');
 
 // Fetch events created by the logged-in user (Host Dashboard)
-const getMyEvents = async (req, res) => {
+const getHostedEvents = async (req, res) => {
     try {
-        // Find events where hostId matches the current user's ID
         const events = await Event.find({ hostId: req.user._id })
             .populate('hostId', 'name')
             .populate('attendees', 'name')
             .sort({ createdAt: -1 });
-
         res.status(200).json(events);
     } catch (error) {
         res.status(500).json({ message: error.message });
+    }
+};
+
+const getAttendedEvents = async (req, res) => {
+    try {
+        // 尋找 attendees 陣列中包含自己 ID 的活動
+        const myEvents = await Event.find({ attendees: req.user._id })
+            .populate('hostId', 'name')
+            .sort({ date: 1 });
+        res.status(200).json(myEvents);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching your events', error: error.message });
     }
 };
 
@@ -35,6 +45,7 @@ const createEvent = async (req, res) => {
 
         // Bind the current user's ID as the hostId
         eventData.hostId = req.user._id;
+        eventData.attendees = [req.user._id];
 
         const newEvent = new Event(eventData);
         const savedEvent = await newEvent.save();
@@ -144,25 +155,14 @@ const leaveEvent = async (req, res) => {
 };
 
 
-exports.getMyEvents = async (req, res) => {
-    try {
-        const userId = req.user._id;
-
-        const myEvents = await Event.find({ attendees: userId }).sort({ date: 1 });
-
-        res.status(200).json(myEvents);
-    } catch (error) {
-        res.status(500).json({ message: 'Error fetching your events', error: error.message });
-    }
-};
-
 module.exports = {
     getEvents,
     createEvent,
-    getMyEvents,
+    getHostedEvents,
     updateEvent,
     deleteEvent,
     joinEvent,
     leaveEvent,
-    getEventById
+    getEventById,
+    getAttendedEvents
 };
