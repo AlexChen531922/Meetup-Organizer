@@ -143,6 +143,19 @@ const leaveEvent = async (req, res) => {
     }
 };
 
+
+exports.getMyEvents = async (req, res) => {
+    try {
+        const userId = req.user._id;
+
+        const myEvents = await Event.find({ attendees: userId }).sort({ date: 1 });
+
+        res.status(200).json(myEvents);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching your events', error: error.message });
+    }
+};
+
 module.exports = {
     getEvents,
     createEvent,
