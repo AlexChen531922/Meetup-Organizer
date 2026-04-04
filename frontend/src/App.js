@@ -3,7 +3,10 @@ import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Events from './pages/Events';
+import Groups from './pages/Groups';
 import EventDetails from './pages/EventDetails';
+import MyEvents from './pages/MyEvents';
+import { AuthProvider } from './context/AuthContext';
 import Footer from './components/Footer';
 
 // Import newly added pages
