@@ -59,20 +59,21 @@ jobs:
         working-directory: ./backend
         run: npm test || echo "No tests defined, skipping..."
 
-      # Step 11: Create .env File and Add Secrets - 
+# Step 11: Create .env File and Add Secrets
       - name: Create .env File and Add Secrets
         run: |
-          cd ./backend
-          touch .env
-          echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> .env
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
-          echo "PORT=${{ secrets.PORT }}" >> .env
+          cd backend
+          cat << 'EOF' > .env
+          MONGO_URI=${{ secrets.MONGO_URI }}
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          PORT=${{ secrets.PORT }}
+          EOF
 
-      # Step 12: Start and Restart Services in AWS -
+      # Step 12: Start and Restart Services in AWS
       - name: Start and Restart Services in AWS
         run: |
-          cd /home/ubuntu/Meetup-Organizer/backend
-          pm2 delete all || true
-          pm2 start server.js --name "meetup-backend"
+          cd backend
+          pm2 delete "meetup-backend" || true
+          pm2 start server.js --name "meetup-backend" --update-env
           pm2 save
 
