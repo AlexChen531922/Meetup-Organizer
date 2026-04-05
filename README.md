@@ -42,38 +42,43 @@ This project focuses on the essential workflows of the event management system:
    — 📁 pages      # Web Pages (Home, EventDetails, Admin, Group, MyEvents...)
    — 🔗 App.js     # Router setup
    — 🔗 axiosConfig.jsx # Dynamic Base URL and token injection for Axios instance 
-
+````
 ---
 
-👜 Tech Stack & Deployment Notes
-Frontend: React.js, Tailwind CSS, Axios
-Backend: Node.js, Express.js
-Database: MongoDB Atlas (Cloud Database)
+## 👜 Tech Stack & Deployment Notes ##
+Frontend: React.js, Tailwind CSS, Axios  
+Backend: Node.js, Express.js  
+Database: MongoDB Atlas (Cloud Database)  
 
-💨 AWS Deployment Configuration:
-Server: Hosted on an AWS EC2 instance (Ubuntu).Process Manager: PM2 is used to keep the Node.js backend (port 5001) running in the background.
-Static Hosting: Nginx is configured to serve the compiled React build (frontend/build) on port 80, routing API requests appropriately.
-CI/CD Pipeline: GitHub Actions automatically pulls the latest code from the main branch, installs dependencies, builds the React app, and restarts PM2 for every push.
+## 💨 AWS Deployment Configuration: ##
+Server: Hosted on an AWS EC2 instance (Ubuntu).Process Manager: PM2 is used to keep the Node.js backend (port 5001) running in the background.  
+Static Hosting: Nginx is configured to serve the compiled React build (frontend/build) on port 80, routing API requests appropriately.  
+CI/CD Pipeline: GitHub Actions automatically pulls the latest code from the main branch, installs dependencies, builds the React app, and restarts PM2 for every push.  
 
-⚙️ How to Run Locally
+## ⚙️ How to Run Locally ##
 
-1️⃣Clone the repository:
-Bash
-git clone [https://github.com/AlexChen531922/Meetup-Organizer.git](https://github.com/AlexChen531922/Meetup-Organizer.git)
+1️⃣Clone the repository:  
+```Bash
+git clone [https://github.com/AlexChen531922/Meetup-Organizer.git](https://github.com/AlexChen531922/Meetup-Organizer.git) 
+```
+2️⃣Setup Backend:  
+Navigate to /backend, run npm install.  
+Create a .env file with MONGO_URI, and JWT_SECRET, PORT=5001.Run npm run dev.  
 
-2️⃣Setup Backend:
-Navigate to /backend, run npm install.
-Create a .env file with MONGO_URI, and JWT_SECRET, PORT=5001.Run npm run dev.
+3️⃣Setup Frontend:  
+Navigate to /frontend, run npm install.  
+Run npm start.  
 
-3️⃣Setup Frontend:
-Navigate to /frontend, run npm install.
-Run npm start.
+Congrats you are in!![StarTamilChatStartamilchatGIF](https://github.com/user-attachments/assets/757bbc51-b858-4255-b24f-7405eef702c1)
 
-㊙️ Test Credentials
-For features testing purpose:
-🕶️ Admin
-ID: admin@test.com | PW: admin123
-👤User
-ID: alexc@test.com | PW: test123
 
-<img width="940" height="536" alt="image" src="https://github.com/user-attachments/assets/ed227c0e-7ea8-4f3a-a9d8-7555d5f25623" />
+## ㊙️ Test Credentials ##
+For features testing purpose:  
+🕶️ Admin  
+ID: admin@test.com | PW: admin123  
+
+👤User  
+ID: alexc@test.com | PW: test123  
+
+## Screen Shot ##  
+![Homepagewithpublicip](https://github.com/user-attachments/assets/d5f40fd8-672b-48b0-9263-8daa18729c3b)
