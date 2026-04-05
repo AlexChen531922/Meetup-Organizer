@@ -76,3 +76,4 @@ jobs:
           pm2 delete "meetup-backend" || true
           pm2 start server.js --name "meetup-backend" --update-env
           pm2 save
+
