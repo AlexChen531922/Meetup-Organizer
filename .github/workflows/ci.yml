@@ -71,7 +71,8 @@ jobs:
       # Step 12: Start and Restart Services in AWS -
       - name: Start and Restart Services in AWS
         run: |
+          cd /home/ubuntu/Meetup-Organizer/backend
           pm2 delete all || true
           pm2 start backend/server.js --name "meetup-backend"
           pm2 save
-cd /home/ubuntu/Meetup-Organizer/backend
+
