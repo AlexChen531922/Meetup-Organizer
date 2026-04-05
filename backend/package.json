@@ -1,7 +1,6 @@
 {
-  "name": "task-manager-backend",
-  "version": "1.0.0",
-  "description": "Backend for Task Manager App",
+  "name": "meetup-organizer-backend",
+  "description": "Backend for MeetHub (Meetup Organizer)",
   "main": "server.js",
   "scripts": {
     "test": "mocha",
@@ -26,6 +25,6 @@
     "nodemon": "^2.0.15",
     "sinon": "^19.0.2"
   },
-  "author": "Task Manager Team",
+  "author": "Alex Chen",
   "license": "ISC"
 }
