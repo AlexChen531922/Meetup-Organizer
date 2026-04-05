@@ -1,7 +1,9 @@
 // frontend/src/components/EventCard.jsx
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const EventCard = ({ event }) => {
+    const navigate = useNavigate();
     const capacity = event.capacity || 25;
     const attendeesCount = event.attendeesCount || 0;
     const spotsLeft = capacity - attendeesCount;
@@ -51,7 +53,10 @@ const EventCard = ({ event }) => {
                 </div>
 
 
-                <button className="w-full py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors">
+                <button
+                    onClick={() => navigate(`/events/${event._id}`)}
+                    className="w-full py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors"
+                >
                     View Details
                 </button>
             </div>

@@ -28,12 +28,12 @@ const EventForm = ({ events, setEvents, editingEvent, setEditingEvent, onClose, 
     if (editingEvent) {
       setFormData({
         title: editingEvent.title || '',
-        description: editingEvent.details || editingEvent.details || '',
+        description: editingEvent.description || editingEvent.details || '',
         date: editingEvent.date || '',
         time: editingEvent.time || '',
         location: editingEvent.location || '',
         category: editingEvent.category || '',
-        group: editingEvent.group || '',
+        group: editingEvent.group || 'None',
         attendeeLimit: editingEvent.attendeeLimit || '',
         image: editingEvent.image || '',
       });
