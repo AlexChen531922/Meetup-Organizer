@@ -81,7 +81,7 @@ const EventDetails = () => {
 
     if (loading) return <div className="min-h-screen flex justify-center items-center">Loading event...</div>;
     if (!event) return <div className="min-h-screen flex justify-center items-center">Event not found.</div>;
-
+    const isPastEvent = new Date(event.date) < new Date();
     const hasJoined = user && event.attendees?.some(att => att._id === user.id || att === user.id);
     const isFull = event.attendeeLimit > 0 && event.attendees?.length >= event.attendeeLimit;
 
@@ -233,7 +233,14 @@ const EventDetails = () => {
                                 <span className="font-extrabold text-gray-900 text-2xl">{event.attendees?.length || 0}</span>
                             </div>
 
-                            {hasJoined ? (
+                            {isPastEvent ? (
+                                <button
+                                    disabled
+                                    className="w-full bg-gray-200 text-gray-500 font-bold py-3 rounded-lg cursor-not-allowed mb-3 text-sm"
+                                >
+                                    Event Expired
+                                </button>
+                            ) : hasJoined ? (
                                 <button
                                     onClick={handleLeaveEvent}
                                     disabled={isProcessing}
