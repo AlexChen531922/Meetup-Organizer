@@ -73,6 +73,6 @@ jobs:
         run: |
           cd /home/ubuntu/Meetup-Organizer/backend
           pm2 delete all || true
-          pm2 start backend/server.js --name "meetup-backend"
+          pm2 start server.js --name "meetup-backend"
           pm2 save
 
